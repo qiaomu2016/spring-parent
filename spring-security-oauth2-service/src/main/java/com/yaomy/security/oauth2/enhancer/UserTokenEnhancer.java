@@ -1,16 +1,17 @@
 package com.yaomy.security.oauth2.enhancer;
 
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @Description: 用户自定义token令牌，包括access_token和refresh_token
@@ -19,7 +20,7 @@ import java.util.UUID;
  * @Date: 2019/7/9 19:43
  * @Version: 1.0
  */
-public class UserTokenEnhancer implements TokenEnhancer {
+public class UserTokenEnhancer extends JwtAccessTokenConverter {
     /**
      * @Description 重新定义令牌token
      * @Date 2019/7/9 19:56
@@ -27,25 +28,19 @@ public class UserTokenEnhancer implements TokenEnhancer {
      */
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-       if(accessToken instanceof DefaultOAuth2AccessToken){
-           DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) accessToken;
-           token.setValue(getToken());
-           OAuth2RefreshToken refreshToken = token.getRefreshToken();
-           if(refreshToken instanceof DefaultOAuth2RefreshToken){
-               token.setRefreshToken(new DefaultOAuth2RefreshToken(getToken()));
-           }
-           Map<String, Object> additionalInformation = Maps.newHashMap();
-           additionalInformation.put("client_id", authentication.getOAuth2Request().getClientId());
-           return token;
-       }
-        return accessToken;
-    }
-    /**
-     * @Description 生成自定义token
-     * @Date 2019/7/9 19:50
-     * @Version  1.0
-     */
-    private String getToken(){
-        return StringUtils.join(UUID.randomUUID().toString().replace("-", ""));
+        String userName = authentication.getUserAuthentication().getName();
+        // 与登录时候放进去的UserDetail实现类一直查看link{SecurityConfiguration}
+        Object principal = authentication.getUserAuthentication().getPrincipal();
+        /** 自定义一些token属性 ***/
+        Map<String, Object> additionalInformation = Maps.newHashMap();
+        additionalInformation.put("username", userName);
+        if(principal instanceof User){
+            additionalInformation.put("principal", ((User)principal).getAuthorities());
+        } else {
+            additionalInformation.put("principal", principal);
+        }
+        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInformation);
+        OAuth2AccessToken enhancedToken = super.enhance(accessToken, authentication);
+        return enhancedToken;
     }
 }

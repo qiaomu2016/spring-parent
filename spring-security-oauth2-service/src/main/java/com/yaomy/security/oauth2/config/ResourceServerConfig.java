@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
  */
 @Configuration
 @EnableResourceServer
-public class ResServerConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private TokenStore tokenStore;
 
@@ -57,4 +57,5 @@ public class ResServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/user","/res/**")
                 .authenticated();
     }
+
 }

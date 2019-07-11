@@ -4,20 +4,26 @@ import com.yaomy.security.oauth2.enhancer.UserTokenEnhancer;
 import com.yaomy.security.oauth2.po.AuthUserDetailsService;
 import com.yaomy.security.oauth2.service.OAuth2ClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.approval.ApprovalStore;
-import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.core.userdetails.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description: @EnableAuthorizationServer注解开启OAuth2授权服务机制
@@ -56,7 +62,7 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
         //客户端信息
         tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
         //自定义token生成
-        tokenServices.setTokenEnhancer(tokenEnhancer());
+        tokenServices.setTokenEnhancer(accessTokenConverter());
         //access_token 的有效时长 (秒), 默认 12 小时
         tokenServices.setAccessTokenValiditySeconds(60*15);
         //refresh_token 的有效时长 (秒), 默认 30 天
@@ -102,38 +108,17 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
      */
     @Bean
     public TokenStore tokenStore() {
-        //token保存在内存中（也可以保存在数据库、Redis中）。
-        //如果保存在中间件（数据库、Redis），那么资源服务器与认证服务器可以不在同一个工程中。
-        //注意：如果不保存access_token，则没法通过access_token取得用户信息
-        return new InMemoryTokenStore();
+        return new JwtTokenStore(accessTokenConverter());
     }
     /**
-     * @Description ApprovalStore用户保存、检索和撤销用户审批的界面
-     * @Author 姚明洋
-     * @Date 2019/7/11 14:11
-     * @Version  1.0
-     */
-/*    @Bean
-    public ApprovalStore approvalStore() throws Exception {
-        TokenApprovalStore store = new TokenApprovalStore();
-        store.setTokenStore(tokenStore());
-        return store;
-    }*/
-/*    @Bean
-    public UserApprovalHandler userApprovalHandler1(){
-        TokenStoreUserApprovalHandler userApprovalHandler = new TokenStoreUserApprovalHandler();
-        userApprovalHandler.setTokenStore(tokenStore());
-        return userApprovalHandler;
-    }*/
-    /**
-     * @Description 自定义生成令牌token
-     * @Date 2019/7/9 19:58
+     * @Description 自定义token令牌增强器
+     * @Date 2019/7/11 16:22
      * @Version  1.0
      */
     @Bean
-    public TokenEnhancer tokenEnhancer(){
-        return new UserTokenEnhancer();
+    public JwtAccessTokenConverter accessTokenConverter(){
+        JwtAccessTokenConverter accessTokenConverter = new UserTokenEnhancer();
+        accessTokenConverter.setSigningKey("123");
+        return accessTokenConverter;
     }
-
-
 }
