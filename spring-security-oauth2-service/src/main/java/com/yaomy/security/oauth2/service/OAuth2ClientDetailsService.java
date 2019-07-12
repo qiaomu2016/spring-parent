@@ -33,7 +33,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
         InMemoryClientDetailsServiceBuilder inMemoryClientDetailsServiceBuilder = new InMemoryClientDetailsServiceBuilder();
         inMemoryClientDetailsServiceBuilder
                 .withClient("client")
-                    // client_secret
+                    // client secret
                     .secret(passwordEncoder.encode("secret"))
                     /**
                      ----支持的认证授权类型----
@@ -53,6 +53,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                     .scopes("insert","update","del", "select", "replace")
                     .and()
                 .withClient("client_password")
+                    //client secret
                     .secret(passwordEncoder.encode("secret"))
                     /**
                      ----密码模式---
@@ -62,7 +63,8 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                      --username:用户名，必选
                      --password:密码，必选
                      */
-                    .authorizedGrantTypes("password")
+                    .authorizedGrantTypes("password","refresh_token")
+                    // 允许的授权范围
                     .scopes("test","ceshi");
         try{
             clientDetailsService = inMemoryClientDetailsServiceBuilder.build();
