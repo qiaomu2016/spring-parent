@@ -32,7 +32,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
     public void init(){
         InMemoryClientDetailsServiceBuilder inMemoryClientDetailsServiceBuilder = new InMemoryClientDetailsServiceBuilder();
         inMemoryClientDetailsServiceBuilder
-                .withClient("client")
+                .withClient("auth_code")
                     // client secret
                     .secret(passwordEncoder.encode("secret"))
                     /**
@@ -57,6 +57,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                     .secret(passwordEncoder.encode("secret"))
                     /**
                      ----密码模式---
+                     自己有一套账号权限体系在认证服务器中对应,客户端认证的时候需要带上自己的用户名和密码
                      --client_id：客户端ID，必选
                      --client_secret：客户端密码，必选
                      --grant_type：必须为password，必选
@@ -65,7 +66,23 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                      */
                     .authorizedGrantTypes("password","refresh_token")
                     // 允许的授权范围
-                    .scopes("test","ceshi");
+                    .scopes("test","ceshi")
+                    .and()
+                .withClient("client")
+                    //client secret
+                    .secret(passwordEncoder.encode("secret"))
+                    /**
+                     ---clent模式---
+                     没有用户的概念，直接与认证服务器交互，用配置中的用户信息去申请access_token,客户端有自己的client_id、client_secret对应于用户的username、password,
+                     客户端拥有自己的authorities，采用client模式认证，客户端的权限就是客户端自己的权限
+                     --client_id：客户端ID，必选
+                     --client_secret：客户端密码，必选
+                     --grant_type：必须为password，必选
+                     --scope：授权范围，必选
+                     */
+                    .authorizedGrantTypes("client_credentials","refresh_token")
+                    // 允许的授权范围
+                    .scopes("insert","del", "update");
         try{
             clientDetailsService = inMemoryClientDetailsServiceBuilder.build();
         } catch (Exception e){

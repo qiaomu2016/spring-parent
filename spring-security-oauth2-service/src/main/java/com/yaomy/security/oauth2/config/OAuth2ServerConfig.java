@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -79,6 +80,8 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
                 .userDetailsService(authUserDetailsService)
                 //token相关服务
                 .tokenServices(tokenServices)
+                //控制TokenEndpoint端点请求访问的类型，默认HttpMethod.POST
+                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 /**
                  pathMapping用来配置端点URL链接，第一个参数是端点URL默认地址，第二个参数是你要替换的URL地址
                  上面的参数都是以“/”开头，框架的URL链接如下：

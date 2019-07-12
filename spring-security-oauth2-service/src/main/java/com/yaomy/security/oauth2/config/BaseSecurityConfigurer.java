@@ -89,6 +89,11 @@ public class BaseSecurityConfigurer extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(this.authUserDetailsService).passwordEncoder(this.passwordEncoder());
         auth.authenticationProvider(this.authenticationProvider());
     }
+    /**
+     * @Description 需要主动暴漏AuthenticationManager，否则会报异常
+     * @Date 2019/7/12 13:42
+     * @Version  1.0
+     */
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -105,7 +110,7 @@ public class BaseSecurityConfigurer extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
     /**
-     * @Description 自定义加密
+     * @Description 自定义加密器
      * @Date 2019/7/10 15:07
      * @Version  1.0
      */
