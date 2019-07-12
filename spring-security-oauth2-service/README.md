@@ -1,7 +1,7 @@
 # spring-parent
 <h3>Spring Security OAuth2</h3> 
 
-#### 1.四种授权码模式
+#### 1.四种授权模式
 - 授权码模式
 - 密码模式
 - 客户端模式

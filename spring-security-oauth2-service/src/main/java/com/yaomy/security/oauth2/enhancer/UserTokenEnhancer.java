@@ -27,7 +27,9 @@ public class UserTokenEnhancer extends JwtAccessTokenConverter {
         String userName = authentication.getUserAuthentication().getName();
         // 与登录时候放进去的UserDetail实现类一直查看link{SecurityConfiguration}
         Object principal = authentication.getUserAuthentication().getPrincipal();
-        /** 自定义一些token属性 ***/
+        /**
+         自定义一些token属性
+         **/
         Map<String, Object> additionalInformation = Maps.newHashMap();
         additionalInformation.put("username", userName);
         if(principal instanceof User){
