@@ -69,6 +69,8 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                      --password:密码，必选
                      */
                     .authorizedGrantTypes("password","refresh_token")
+                    //资源ID
+                    .resourceIds("resource_password_id")
                     // 允许的授权范围
                     .scopes("test","ceshi")
                 .and()

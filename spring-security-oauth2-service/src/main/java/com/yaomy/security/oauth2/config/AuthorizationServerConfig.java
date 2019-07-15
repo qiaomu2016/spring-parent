@@ -29,13 +29,13 @@ import java.util.Map;
 /**
  * @Description: @EnableAuthorizationServer注解开启OAuth2授权服务机制
  * @ProjectName: spring-parent
- * @Package: com.yaomy.security.oauth2.config.OAuth2ServerConfig
+ * @Package: com.yaomy.security.oauth2.config.AuthorizationServerConfig
  * @Date: 2019/7/9 11:26
  * @Version: 1.0
  */
 @Configuration
 @EnableAuthorizationServer
-public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -102,7 +102,7 @@ public class OAuth2ServerConfig extends AuthorizationServerConfigurerAdapter {
         security.realm("OAuth2-Sample")
                 .allowFormAuthenticationForClients()
                 .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+                .checkTokenAccess("permitAll()");
     }
     /**
      * @Description OAuth2 token持久化接口

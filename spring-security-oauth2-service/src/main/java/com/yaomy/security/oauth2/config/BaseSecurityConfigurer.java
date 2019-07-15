@@ -61,14 +61,17 @@ public class BaseSecurityConfigurer extends WebSecurityConfigurerAdapter {
                     //无条件允许访问
                     .permitAll()
                 .and()
-                    .authorizeRequests()
-                    .antMatchers()
-                    .permitAll()
+                    .requestMatchers()
+                    .anyRequest()
                 .and()
+                    .authorizeRequests()
+                    .antMatchers("/oauth/**")
+                    .permitAll()
+              /*  .and()
                     //其它的请求要求必须有身份认证
                     .authorizeRequests()
                     .anyRequest()
-                    .authenticated()
+                    .authenticated()*/
                 .and()
                     .logout()
                     .logoutSuccessHandler(logoutSuccessHandler)
