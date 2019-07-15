@@ -146,4 +146,4 @@ public class ResourceBootStrap {
     }
 }
 ```
-源码GitHub地址(jwt_token分支)：[https://github.com/mingyang66/spring-parent/tree/jwt_token/spring-security-resource-service](https://github.com/mingyang66/spring-parent/tree/jwt_token/spring-security-resource-service)
+源码GitHub地址(jwt_token分支)：[https://github.com/mingyang66/spring-parent/tree/jwt_token/spring-security-oauth2-resource-service](https://github.com/mingyang66/spring-parent/tree/jwt_token/spring-security-oauth2-resource-service)
