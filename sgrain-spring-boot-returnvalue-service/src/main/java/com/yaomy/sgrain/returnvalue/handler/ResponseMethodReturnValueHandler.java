@@ -1,8 +1,8 @@
 package com.yaomy.sgrain.returnvalue.handler;
 
-import com.yaomy.sgrain.common.control.enums.HttpStatus;
-import com.yaomy.sgrain.common.control.po.BaseResponse;
-import com.yaomy.sgrain.common.control.utils.RouteUtils;
+import com.yaomy.sgrain.common.enums.HttpStatus;
+import com.yaomy.sgrain.common.po.BaseResponse;
+import com.yaomy.sgrain.common.utils.RouteUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.web.bind.annotation.ResponseBody;

@@ -1,8 +1,8 @@
 package com.yaomy.sgrain.exception.advice;
 
 
-import com.yaomy.sgrain.common.control.enums.HttpStatus;
-import com.yaomy.sgrain.common.control.po.BaseResponse;
+import com.yaomy.sgrain.common.enums.HttpStatus;
+import com.yaomy.sgrain.common.po.BaseResponse;
 import com.yaomy.sgrain.exception.business.BusinessException;
 import com.yaomy.sgrain.logback.utils.LoggerUtil;
 import org.apache.commons.lang3.StringUtils;

@@ -1,13 +1,11 @@
 package com.yaomy.sgrain.aop.config;
 
 import com.yaomy.sgrain.aop.advice.ControllerAdviceInterceptor;
-import com.yaomy.sgrain.aop.po.Interceptor;
 import com.yaomy.sgrain.aop.properties.InterceptorProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(InterceptorProperties.class)
-@ConditionalOnClass(Interceptor.class)
 public class InterceptorAutoConfiguration {
 
     /**
